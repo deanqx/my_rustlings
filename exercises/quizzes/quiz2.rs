@@ -25,9 +25,33 @@ enum Command {
 
 mod my_module {
     use super::Command;
+    const APPEND_WORD: &str = "bar";
 
     // TODO: Complete the function as described above.
     // pub fn transformer(input: ???) -> ??? { ??? }
+    pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
+        let mut output = Vec::with_capacity(input.len());
+
+        for (s, command) in input {
+            match command {
+                Command::Uppercase => output.push(s.to_uppercase()),
+                Command::Trim => output.push(String::from(s.trim())),
+                Command::Append(count) => {
+                    let mut appended = String::with_capacity(s.len() + count * APPEND_WORD.len());
+
+                    appended.push_str(s.as_str());
+
+                    for _ in 0..count {
+                        appended.push_str(APPEND_WORD);
+                    }
+
+                    output.push(appended);
+                }
+            }
+        }
+
+        output
+    }
 }
 
 fn main() {
@@ -38,6 +62,7 @@ fn main() {
 mod tests {
     // TODO: What do we need to import to have `transformer` in scope?
     // use ???;
+    use super::my_module::transformer;
     use super::Command;
 
     #[test]
